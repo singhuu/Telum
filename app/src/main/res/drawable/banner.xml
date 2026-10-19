@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telum's TV banner: the halo mark and a hand-drawn stroked wordmark (no font needed). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path android:pathData="M0,0h320v180h-320z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="0" android:startY="0" android:endX="320" android:endY="180"
+                android:startColor="#FF3A2F7A" android:centerColor="#FF1A1F45" android:endColor="#FF0A0C16" />
+        </aapt:attr>
+    </path>
+    <path android:pathData="M0,0h320v180h-320z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="radial" android:centerX="82" android:centerY="88" android:gradientRadius="120"
+                android:startColor="#55FF9E5E" android:endColor="#00FF9E5E" />
+        </aapt:attr>
+    </path>
+    <group android:translateX="-10">
+    <!-- Halo mark -->
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="6"
+        android:pathData="M82,64a24,24 0 1 1 0,48a24,24 0 1 1 0,-48z" />
+    <path android:fillColor="#FFFFD58A"
+        android:pathData="M82,79a9,9 0 1 1 0,18a9,9 0 1 1 0,-18z" />
+    <!-- Wordmark: T e l u m -->
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="7"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M120,72 H146 M133,72 V106
+            M154,93 H177 A12,12 0 1 0 174,102
+            M190,72 V106 H195
+            M207,80 V96 A10,10 0 0 0 227,96 V80 M227,80 V106
+            M240,106 V80 M240,89 A8,8 0 0 1 256,89 V106 M256,89 A8,8 0 0 1 272,89 V106" />
+    </group>
+</vector>
