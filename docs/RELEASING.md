@@ -29,6 +29,20 @@ Verify the APK with Android build tools: `apksigner verify --verbose --print-cer
 
 GitHub CI builds a debug test artifact and an unsigned release artifact. It does not publish a release or hold signing credentials.
 
+## Installation information for a public release
+
+Publish the following information with each signed APK:
+
+- The version name and version code.
+- The source tag or commit.
+- The APK filename and SHA-256 checksum.
+- The release certificate SHA-256 fingerprint from `apksigner`.
+- The minimum Android version and known device limits.
+- The device tests completed with this exact APK.
+- Any update restrictions or changes to permissions.
+
+Link the [agent guide](INSTALL-AGENT.md) and [manual guide](INSTALL.md) from the release notes. Keep the APK, checksum, and corresponding source available together. Do not label an emulator-only test as a physical SHIELD test.
+
 ## Service terms
 
 TheAudioDB's [API terms](https://www.theaudiodb.com/docs_terms_of_use.php) distinguish free use from app-store distribution. Check their current terms and arrange the required subscription before publishing a build through an app store. The source uses the documented shared free API key, not a private credential. Do not put a private key into a public repository.

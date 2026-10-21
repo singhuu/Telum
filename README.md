@@ -1,63 +1,66 @@
 # Telum
 
-A remote-first home screen for Android TV 10 and newer. Telum puts your apps, music and the rows your apps publish on one screen.
+Telum is a home screen for Android TV. It is optimized for NVIDIA SHIELD Pro and designed for other Android TV boxes.
 
-Telum is named after Gamma Sagittae, the Dart. See the [star-name entry](https://ase.exopla.net/index.php/Telum).
+Android 10 or newer is required. Device software controls installation and Home selection. Compatibility with every box is not confirmed.
 
-## Features
+Telum takes its name from a historical name for Gamma Sagittae. See the [star-name entry](https://ase.exopla.net/index.php/Telum).
 
-- App tiles with backgrounds that follow the selected app. Installed banners and icons supply the artwork; common TV services also have defined color palettes.
-- Hold OK to move or hide an app. Hidden apps remain available in settings.
-- Music controls through Android media sessions. After 60 seconds without interaction during playback, the home screen collapses into dim artwork. Press a navigation key to return.
-- Optional artist photos, weather, Continue Watching and selectable rows from apps.
-- A custom Canvas interface with no advertising, analytics, account or bundled streaming catalogue.
+## Install with an AI assistant, recommended
 
-Music idle mode supports Spotify, YouTube Music, Amazon Music and TuneIn. Video and unknown app sessions retain ordinary media controls without starting this mode. The mode reduces static UI and shifts the artwork periodically. It cannot guarantee protection against burn-in. It respects Android's screensaver and display timeout.
+Give your AI assistant this repository link and this request:
 
-## Build
+> Help me install Telum on my TV: [paste the GitHub repository link]. Read the README and docs/INSTALL-AGENT.md. Guide me one step at a time. Check my TV model before you give commands. Keep a way to restore my current home screen.
 
-Install JDK 17 or 21 and Android SDK platform 35 with build tools 35.0.0. Set `ANDROID_HOME` to your SDK folder, or create a local `local.properties` containing `sdk.dir`. Do not commit that file.
+The [agent installation guide](docs/INSTALL-AGENT.md) works without a specific AI provider or tool. It supports assistants with local tools and assistants that only give instructions. An assistant needs access to these documents to use them. If it cannot read the repository, give it the guide text.
 
-On Windows:
+The assistant checks your TV, finds a suitable APK, and guides installation. It checks each result before the next step. You keep control of TV prompts and Home selection.
 
-```powershell
-.\gradlew.bat :app:assembleDebug :app:lintDebug
-```
+An APK is an Android installation file. A signed release APK is the preferred choice. If no signed release exists, the guide explains how to build a test APK. Source ZIP files and unsigned APK files cannot install the app.
 
-On Linux or macOS:
+For installation without an assistant, use the [manual installation guide](docs/INSTALL.md).
 
-```sh
-./gradlew :app:assembleDebug :app:lintDebug
-```
+## Why choose Telum instead of the stock home screen?
 
-The first build downloads Gradle and dependencies. The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Release builds are unsigned unless you supply your own signing credentials. See [releases](docs/RELEASING.md).
+Telum gives you control of the home screen content and layout.
 
-## Install and configure
+| Benefit | Telum behavior |
+| --- | --- |
+| Your apps come first | Large app tiles support remote navigation. Hold OK to move or hide a tile. |
+| No added advertisements | Telum adds no sponsored rows, analytics, or account requirement. Streaming apps control their own advertisements. |
+| Content is optional | You choose whether to show app content, music controls, weather, and artist photos. |
+| Backgrounds follow your apps | Common services have defined colors. Other apps use their artwork or a fallback color. |
+| A dim screen for music | After 60 seconds without input, music playback can replace the tiles with dim artwork. |
+| Animations stop when settled | Telum stops drawing settled animations. The tests below record the observed behavior. |
 
-1. Enable developer options and network or USB debugging on your TV. Authorize your computer.
-2. Run `adb devices` and use your TV's serial explicitly in subsequent commands.
-3. Run `adb -s YOUR_TV_SERIAL install app/build/outputs/apk/debug/app-debug.apk`.
-4. Open Telum from your current launcher and test navigation before selecting it as the default Home app in your TV's settings.
-5. In Control center > Telum, enable Music controls and grant notification access if you want media integration. Enable Show what you're watching and grant TV listings permission for available app rows.
+The current Telum build drew one frame during a 45-second paused-media emulator check. This is an idle drawing result, not a speed comparison with the stock launcher. See [test results and limits](docs/PERFORMANCE.md).
 
-Some TV firmware does not offer a default Home selector. Firmware-specific launcher replacement is outside this installation guide. Keep a working way to reach system settings and restore your previous home screen.
+Music idle mode supports Spotify, YouTube Music, Amazon Music, and TuneIn package profiles. It moves the artwork periodically and preserves the TV screensaver settings. Press an arrow, OK, or Back to restore the home screen. The mode reduces static screen content. It does not guarantee protection against screen burn-in.
 
-Telum uses `dev.telum.launcher`. Builds under the old development package are separate apps: settings, notification access and the Home role do not migrate automatically. Installing Telum does not replace or remove that app.
+## Device and app support
 
-## App compatibility
+NVIDIA SHIELD Pro is the main optimization target. Other Android TV and Google TV boxes need Android 10 or newer and permission to install APK files. Home replacement also needs support from the device software. Phone-style Android boxes and modified firmware need separate checks.
 
-Any installed app with a TV launcher activity can appear. Netflix's tile and color background do not require membership. Personalized artwork and recommendations require data published by the installed app, and may depend on sign-in, membership, region and firmware. Telum does not retrieve your Netflix account history.
+An installed app with a TV launcher activity can appear in Telum. Netflix's tile and background colors work without a subscription. App content and recommendations depend on the installed app, account, region, and device software. Telum cannot supply content that an app does not share.
 
-See [app support](docs/APPS.md) for the package coverage and limits. Missing recommendations leave the ordinary app background usable.
+See [app support](docs/APPS.md) for the supported profiles and content limits.
 
-## Privacy and credits
+## Build from source
 
-Weather and artist photos are off by default. Their providers receive requests only when you enable the relevant feature. See [privacy](docs/PRIVACY.md) and [third-party notices](THIRD_PARTY_NOTICES.md).
+Use the [build procedure](docs/INSTALL.md#build-a-test-apk) to create a local test APK. Maintainers must follow the [release procedure](docs/RELEASING.md) for public APK files.
 
-## Development status
+Telum uses package `dev.telum.launcher`. Earlier packages install as separate apps. Their settings, permissions, and Home selection do not transfer to Telum.
 
-This is an early release. The repository includes build CI and a [manual test checklist](docs/TESTING.md). Emulator checks do not establish compatibility with every TV, streaming account or firmware. Subscription-dependent integrations need testing with the relevant account.
+## Privacy
+
+Weather and artist photos are optional. Their providers receive requests only when you enable the related feature. See [privacy](docs/PRIVACY.md) and [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## Project status
+
+This is an early release. The repository includes build checks and a [device test checklist](docs/TESTING.md). The current Telum build has emulator test results. Earlier development builds have physical SHIELD results. Neither establishes support for every device or streaming account.
 
 ## License
 
-Telum's original source is licensed under [GPL-3.0-only](LICENSE). Bundled fonts and the Gradle wrapper retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md). Service names belong to their owners. Telum is an independent launcher.
+Telum's original source uses [GPL-3.0-only](LICENSE). Bundled fonts and the Gradle wrapper retain their own licenses. See [third-party notices](THIRD_PARTY_NOTICES.md).
+
+Telum is an independent project. NVIDIA and the named streaming services do not endorse it.
