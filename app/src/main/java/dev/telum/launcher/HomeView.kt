@@ -64,6 +64,8 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
         /** Whether the remote's Home button opens Telum. */
         fun isDefaultHome(): Boolean
         fun stockHomeEnabled(): Boolean
+        /** The name the TV gives Google's TV launcher, for example "Android TV Home". */
+        fun stockHomeName(): String
         fun reloadApps()
         /** Rows other apps publish (continue watching); see Content. */
         fun content(): Content
@@ -2012,11 +2014,12 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
         // Read once when the page opens, not on every rebuild or frame: getMemoryInfo walks /proc.
         val memory = host.memoryLine() // refreshes in the background; the row reads the latest
         val stockHome = host.stockHomeEnabled()
+        val stockName = host.stockHomeName()
         val telumHome = host.isDefaultHome()
-        return SheetPage("telum", "Telum") { telumItems(memory, stockHome, telumHome) }
+        return SheetPage("telum", "Telum") { telumItems(memory, stockHome, stockName, telumHome) }
     }
 
-    private fun telumItems(memory: String, stockHome: Boolean, telumHome: Boolean): List<SheetItem> =
+    private fun telumItems(memory: String, stockHome: Boolean, stockName: String, telumHome: Boolean): List<SheetItem> =
         listOfNotNull(
             SheetItem("move", "Rearrange apps") { closeSheet(); zone = Zone.GRID; startMove() },
             SheetItem(
@@ -2063,8 +2066,9 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
             SheetItem("eye", "Hidden apps", value = { prefs.hidden.size.takeIf { it > 0 }?.toString() ?: "None" }, chevron = true) { pushPage(hiddenPage()) },
             // Setup asks once; this row stays for later, until the Home button opens Telum.
             if (telumHome) null else SheetItem("home", "Make Telum your Home") { closeSheet(); host.system("default-home") },
-            if (stockHome) SheetItem("home", "Open Google TV home") { closeSheet(); host.system("stock-home") }
-            else SheetItem("home", "Google TV home", value = { "Turned off" }, enabled = false),
+            // The TV's own name for its built-in Home, as the install guide and the H6 dialog use it.
+            if (stockHome) SheetItem("home", "Open $stockName") { closeSheet(); host.system("stock-home") }
+            else SheetItem("home", stockName, value = { "Turned off" }, enabled = false),
             SheetItem("info", "Credits", chevron = true) { host.system("credits") },
             SheetItem("info", "About Telum", value = { host.memoryText() }, enabled = false),
         )

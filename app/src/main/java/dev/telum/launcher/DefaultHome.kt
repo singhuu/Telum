@@ -36,6 +36,19 @@ class DefaultHome(private val context: Context) {
     fun currentName(): String? = resolved()?.takeIf { it.activityInfo.packageName != "android" }
         ?.loadLabel(context.packageManager)?.toString()
 
+    /**
+     * The name of [pkg]'s Home screen, the same one [currentName] gives while that app opens
+     * first, and read even while the app is turned off. Null if Android can't give a name.
+     */
+    fun homeName(pkg: String): String? {
+        val pm = context.packageManager
+        val label = pm.queryIntentActivities(intent().setPackage(pkg), PackageManager.MATCH_DISABLED_COMPONENTS)
+            .firstOrNull()?.loadLabel(pm)
+            ?: try { pm.getApplicationInfo(pkg, 0).loadLabel(pm) } catch (_: PackageManager.NameNotFoundException) { null }
+        // Android falls back to the package name when an app has no label.
+        return label?.toString()?.takeIf { it.isNotBlank() && it != pkg }
+    }
+
     private fun resolved() = context.packageManager.resolveActivity(intent(), PackageManager.MATCH_DEFAULT_ONLY)
 
     private fun roles(): RoleManager? = context.getSystemService(RoleManager::class.java)

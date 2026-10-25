@@ -567,10 +567,13 @@ If `set-home-activity` is not available, push Home. Select the previous Home app
 
 Use this procedure only while Telum operates. It opens **Settings** through Telum.
 
-1. Open **Control centre** › **All settings**.
-2. Open **Apps** › **See all apps** › **Show system apps**.
-3. Select **Android TV Home**. Select **Enable**.
-4. Push Home. If Android shows a list, select **Android TV Home**.
+1. Open **Control centre** › **Telum**. Find the Android TV Home item near the end of the list.
+   - If it shows **Android TV Home** and **Turned off**, the original Home app is disabled. Go to step 2.
+   - If it shows **Open Android TV Home**, the original Home app is enabled. Go to step 5.
+2. Push Back. Select **All settings**.
+3. Open **Apps** › **See all apps** › **Show system apps**.
+4. Select **Android TV Home**. Select **Enable**.
+5. Push Home. If Android shows a list, select **Android TV Home**.
 
 The menu names can be different in other versions of the device software.
 

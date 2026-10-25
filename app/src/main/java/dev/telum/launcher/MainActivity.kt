@@ -758,6 +758,9 @@ class MainActivity : Activity(), HomeView.Host {
         false
     }
 
+    // "Android TV Home" on the SHIELD.
+    override fun stockHomeName(): String = defaultHome.homeName(STOCK_HOME) ?: "TV home"
+
     @Volatile private var memory = "v${BuildConfig.VERSION_NAME}"
 
     override fun memoryLine(): String {
