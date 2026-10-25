@@ -575,6 +575,8 @@ Use this procedure only while Telum operates. It opens **Settings** through Telu
 4. Select **Android TV Home**. Select **Enable**.
 5. Push Home. If Android shows a list, select **Android TV Home**.
 
+If Home still opens Telum, use the [ADB procedure above](#with-adb) to restore the default Home selection. Keep Telum installed until Home opens Android TV Home.
+
 The menu names can be different in other versions of the device software.
 
 ## Remove Telum

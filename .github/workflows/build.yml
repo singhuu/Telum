@@ -23,6 +23,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: telum-test-builds
+          if-no-files-found: error
           path: |
             app/build/outputs/apk/debug/*.apk
             app/build/outputs/apk/release/*unsigned.apk

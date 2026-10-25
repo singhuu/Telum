@@ -2,6 +2,8 @@
 
 Telum is a home screen app for Android TV. It puts your apps first, adds no advertisements, and lets you select what the home screen shows.
 
+Developed by Shantanu Singh with Claude and OpenAI Codex.
+
 Telum is optimized for NVIDIA SHIELD TV. Other Android TV devices with Android 10 or newer can also use it. Compatibility with all devices is not confirmed.
 
 **[Download the latest APK](https://github.com/singhuu/Telum/releases/latest/download/telum.apk)** · [All releases](https://github.com/singhuu/Telum/releases) · [Install with an AI agent](#install-telum) · [Manual installation](docs/INSTALL.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)

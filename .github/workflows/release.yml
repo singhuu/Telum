@@ -48,11 +48,21 @@ jobs:
       - name: Restore the release key
         env:
           KEYSTORE_BASE64: ${{ secrets.TELUM_KEYSTORE_BASE64 }}
+          TELUM_STORE_PASSWORD: ${{ secrets.TELUM_STORE_PASSWORD }}
+          TELUM_KEY_ALIAS: ${{ secrets.TELUM_KEY_ALIAS }}
+          TELUM_KEY_PASSWORD: ${{ secrets.TELUM_KEY_PASSWORD }}
         run: |
           if [ -z "$KEYSTORE_BASE64" ]; then
             echo "::error::The TELUM_KEYSTORE_BASE64 secret is not set. See docs/RELEASING.md."
             exit 1
           fi
+          for variable in TELUM_STORE_PASSWORD TELUM_KEY_ALIAS TELUM_KEY_PASSWORD; do
+            if [ -z "${!variable}" ]; then
+              echo "::error::The $variable secret is not set. See docs/RELEASING.md."
+              exit 1
+            fi
+          done
+          umask 077
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
           echo "TELUM_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
 
@@ -90,6 +100,7 @@ jobs:
         with:
           name: telum-${{ steps.version.outputs.name }}-mapping
           path: app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error
           retention-days: 90
 
       - name: Write the release notes
@@ -134,10 +145,24 @@ jobs:
           } > notes.md
           cat notes.md
 
-      - name: Create the draft release
+      - name: Create or update the draft release
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.name }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/telum.apk dist/SHA256SUMS \
-            --draft --verify-tag --title "Telum $VERSION" --notes-file notes.md
+          draft=$(gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            | jq -r --arg tag "$GITHUB_REF_NAME" '.[] | select(.tag_name == $tag) | .draft')
+          case "$draft" in
+            "")
+              gh release create "$GITHUB_REF_NAME" dist/telum.apk dist/SHA256SUMS \
+                --draft --verify-tag --title "Telum $VERSION" --notes-file notes.md
+              ;;
+            true)
+              gh release edit "$GITHUB_REF_NAME" --title "Telum $VERSION" --notes-file notes.md
+              gh release upload "$GITHUB_REF_NAME" dist/telum.apk dist/SHA256SUMS --clobber
+              ;;
+            *)
+              echo "::error::A published release already uses $GITHUB_REF_NAME. Create a new version instead."
+              exit 1
+              ;;
+          esac

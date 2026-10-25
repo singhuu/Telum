@@ -45,6 +45,8 @@ Keep the `SHA256:` value. Each release must show the same value. `keytool` shows
 
 ## Add the secrets to GitHub one time
 
+Use a public repository for this workflow on GitHub Free, Pro, or Team. Private repositories need GitHub Enterprise Cloud for artifact attestations. See [GitHub's attestation requirements](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations).
+
 The release workflow reads four repository secrets. GitHub keeps them encrypted. Workflow logs do not show them.
 
 | Secret | Value |
@@ -98,7 +100,7 @@ git push origin v0.1.1
 
 The tag must be `v` followed by `versionName`. If they are different, the release workflow stops.
 
-6. Open **Actions** › **Release** on GitHub. Wait until the workflow passes.
+6. Open **Actions** › **Release** on GitHub. Wait until the workflow passes. Do not edit or publish the draft during a workflow run.
 7. Open **Releases**. The new release has the label **Draft**. Only maintainers see a draft.
 8. Download `telum.apk` and `SHA256SUMS` from the draft. Make sure that the checksum is correct.
 9. Make sure that the **Signing certificate SHA-256** in the draft notes is the fingerprint that you recorded.
@@ -116,11 +118,15 @@ After you publish, the address `https://github.com/singhuu/Telum/releases/latest
 | --- | --- |
 | The workflow says that a secret is not set. | Add the secret. Then select **Re-run all jobs** in the workflow run. |
 | The tag does not match `versionName`. | Delete the tag on GitHub and on your computer. Correct the version. Make the tag again. |
-| The build or a check fails. | Read the log. Correct the source. Delete the tag. Make the tag again on the corrected commit. The workflow makes no draft when it fails before the last step. |
+| The build or a check fails. | Read the log. Correct the source. Delete the tag. Make the tag again on the corrected commit. |
 | The workflow says that `CHANGELOG.md` has no section. | Add the section `## VERSION`. Delete the tag. Make the tag again on the new commit. |
 | The APK fails the device tests. | Do not publish the draft. Delete the draft and the tag. Correct the source. Use a new version code. |
 | The fingerprint is different. | Do not publish. Make sure that the secrets contain the correct key file. |
-| The attestation step fails. | The repository must be public. Artifact attestations need a public repository on a free GitHub plan. |
+| The attestation step fails. | Read the log. Check the repository visibility and your GitHub plan against the attestation requirements above. |
+| The draft exists, but the asset upload failed. | Select **Re-run all jobs**. The workflow replaces the draft assets and notes. Test the replacement APK again. |
+| The workflow says that a published release uses the tag. | Keep the published release. Use a new version with a higher version code. |
+
+A retry replaces the draft APK, checksum, and release notes. Record the device tests again for the replacement APK. Keep the draft unpublished until the workflow passes.
 
 To delete a tag:
 
