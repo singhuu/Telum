@@ -1,77 +1,76 @@
 # Test results and limits
 
-This report separates product behavior from performance measurements. It does not establish that Telum is faster than every stock launcher.
+This report keeps the product behavior and the performance measurements separate. It does not show that Telum is faster than each original home screen.
 
-## Benefits over the tested stock home screen
+## Differences from the tested original home screen
 
-The inspected SHIELD stock home screen showed store and promotional tiles. Telum places the installed apps at the center of the home screen. It adds no store tiles or sponsored rows.
+The original home screen of the tested SHIELD TV showed store tiles and promotional tiles. Telum puts the installed apps at the center of the home screen. It adds no store tiles and no sponsored rows.
 
-You can move or hide app tiles. You can choose which app content appears. Weather and artist photos are optional. Music playback can use a dim artwork display after 60 seconds without input.
+You can move and hide app tiles. You select which app content shows. Weather and artist photos are optional. During music, a dim artwork display can show after 60 seconds without input.
 
-These are layout and control benefits. They do not depend on a claimed speed increase. Streaming apps still control their own content and advertisements.
+These are differences in layout and control. They do not depend on a speed increase. Streaming apps still control their own content and advertisements.
 
-## Current Telum build
+## Version 0.1.0
 
-Test date: 19 October 2026. Source baseline: initial public source commit `00de2d3f145f9ba4a2dce1c4353b6cbf5b53f3a2`.
-
-The test used an Android TV 11 x86 emulator. The APK used release optimization and a local debug key for testing. It was not an official signed release.
-
-Test APK SHA-256:
-
-```text
-DA02E7C656CD129805D09D4B0DFD68F82F0C9275D578012807D6C7BF5C05B1A4
-```
-
-| Check | Observed result | Limit |
+| Check | Result | Limit |
 | --- | --- | --- |
-| Playing media, settled home screen | One frame in approximately 28 seconds. | One emulator observation with a synthetic media session. |
-| Paused media, settled home screen | One frame in approximately 45 seconds. | Measures app drawing, not whole-device CPU use or power. |
-| Music idle transition | Dim artwork appeared after 60 seconds without input. | Synthetic media session, not Spotify account playback. |
-| First navigation press | The ordinary home screen returned with the previous focus. No app opened. | The tested D-pad path only. |
-| Pause through the on-screen control | Playback state changed to paused. | Global remote media-key routing was not established. |
-| Builds and code checks | Behavior checks, debug/release builds, and debug/release lint passed. | Lint reported zero errors and six warnings. |
+| Build checks | Behavior checks, debug and release builds, and debug and release lint passed. Lint reported zero errors. | Build checks do not test a TV device. |
+| Setup and Home question, Android TV 11 emulator | The automatic regression test passed all its checks on two emulator images. It included the intro, the setup, the Home question, and a restart. | An emulator does not have the hardware, the remote, or the device software of a SHIELD TV. |
+| SHIELD TV | Debug builds with the same features operated on a SHIELD TV during development. | The release notes give the tests of the signed release APK. |
 
-The behavior checks cover the idle timer, app profiles, and animation settling. Both the development project and the independent public export passed the build checks.
+The emulator does not give useful frame times for the intro. It translates OpenGL ES on the computer.
 
-The emulator checks used a synthetic publisher with a recognized music package name. They do not establish Spotify or TuneIn service behavior. Netflix subscriber content was not tested.
+## Earlier builds
 
-## Earlier physical SHIELD checks
+These results come from earlier source revisions. They do not prove the performance of version 0.1.0.
 
-Earlier development builds ran on an Android 11 SHIELD identified as product `mdarcy`. The owner identified the box as a SHIELD Pro. The exact retail generation was not independently confirmed.
+Emulator, 19 October 2026, Android TV 11 x86, release optimization with a local test key:
 
-On 18 October 2026, development test 7 drew one frame during a 12-second paused-media interval. This was an earlier package and source revision. It does not establish the current Telum build's physical-device performance.
+| Check | Result | Limit |
+| --- | --- | --- |
+| Playing media, settled home screen | One frame in approximately 28 seconds. | One observation with a simulated media session. |
+| Paused media, settled home screen | One frame in approximately 45 seconds. | This measures app drawing. It does not measure the CPU use or the power of the device. |
+| Music idle display | Dim artwork showed after 60 seconds without input. | Simulated media session, not a Spotify account. |
+| First push of an arrow | The home screen showed again with the previous highlight. No app opened. | The tested arrow path only. |
 
-## Why there is no stock speed or memory percentage
+SHIELD TV, Android 11, product `mdarcy`, identified by the owner as a SHIELD TV Pro:
 
-The stock launcher memory snapshots changed after a reboot and package cleanup. Uptime and installed software differed between those measurements. Later launcher builds also had different features.
+- On 18 October 2026, a development build drew one frame during a 12-second interval with paused media.
+- In October 2026, the earlier intro drew 534 frames in 8.9 seconds at 1920 × 1080. The median frame time was 16.7 ms. The 90th percentile was 16.9 ms.
 
-There is no controlled comparison of the current Telum build and the stock launcher under matching conditions. A percentage speed or memory claim would therefore be unsupported.
+## Why there is no speed or memory percentage
 
-Telum has not demonstrated improved video decoding, network streaming, or recovery from a streaming-app fault. The dim display also does not establish protection against screen burn-in.
+The memory values of the original home screen changed after a restart and a package cleanup. The uptime and the installed software were different between those measurements. Later Telum builds also had different features.
+
+No controlled comparison of version 0.1.0 and the original home screen exists. A percentage for speed or memory has no evidence.
+
+Telum does not improve video decoding, network streaming, or the recovery of a streaming app. The dim display does not prove protection against screen burn-in.
 
 ## Repeat the checks
 
-Use the [device test checklist](TESTING.md) for functional checks. Record the source commit, APK checksum, signing type, device model, Android version, and enabled features.
+Use the [release checks](TESTING.md) for the functions. Record the source commit, the APK checksum, the signature type, the device model, the Android version, and the features that are on.
 
-For an idle drawing check, substitute the verified TV serial:
+To count the frames that Telum draws when it is idle:
+
+1. Reset the counter:
 
 ```sh
 adb -s "TV_SERIAL" shell dumpsys gfxinfo dev.telum.launcher reset
 ```
 
-1. Leave the settled home screen untouched for the selected interval.
-2. Record the interval and playback state.
-3. Read the drawing report.
+2. Do not touch the settled home screen for the interval that you select.
+3. Record the interval and the playback state.
+4. Read the report:
 
 ```sh
 adb -s "TV_SERIAL" shell dumpsys gfxinfo dev.telum.launcher
 ```
 
-4. Record `Total frames rendered` if the device exposes it.
-5. Repeat the check after an app return and a screensaver wake.
+5. Record `Total frames rendered`, if the device shows it.
+6. Do the check again after you return from an app, and after the screensaver.
 
-An animation, clock update, or artwork change can add frames. Do not convert this count into a whole-device power claim.
+An animation, a clock update, or new artwork can add frames. Do not use this count to make a statement about the power of the device.
 
-For a stock comparison, keep the device, uptime, apps, display mode, network, and interaction sequence consistent. Run repeated trials for each launcher. Report the full conditions with the results.
+For a comparison with the original home screen, keep these conditions the same: the device, the uptime, the apps, the display mode, the network, and the sequence of actions. Do each test more than one time for each home screen. Report all the conditions with the results.
 
-This report summarizes local test records. It is not an independent benchmark. Private device logs and account data are excluded from the public repository.
+This report summarizes local test records. It is not an independent benchmark. The public repository does not contain private device logs or account data.

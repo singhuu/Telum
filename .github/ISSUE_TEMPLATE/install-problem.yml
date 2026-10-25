@@ -1,0 +1,88 @@
+name: Installation problem
+description: Telum does not install, does not open, or does not become the Home app.
+title: "Installation: "
+labels: ["installation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read the [troubleshooting guide](https://github.com/singhuu/Telum/blob/main/docs/TROUBLESHOOTING.md) first.
+
+        **Issues are public.** Do not include IP addresses, serial numbers, pairing codes, passwords, or account names.
+  - type: input
+    id: device
+    attributes:
+      label: TV device
+      description: The model of the TV device.
+      placeholder: NVIDIA SHIELD TV Pro (2019)
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version
+      description: Settings › Device Preferences › About, or the result of `getprop ro.build.version.release`.
+      placeholder: "11"
+    validations:
+      required: true
+  - type: input
+    id: telum
+    attributes:
+      label: Telum version and source
+      placeholder: 0.1.0, telum.apk from the Releases page
+    validations:
+      required: true
+  - type: dropdown
+    id: method
+    attributes:
+      label: Installation method
+      options:
+        - AI agent on my computer
+        - AI chat, and I ran the commands
+        - Manual installation guide
+        - Downloader app on the TV
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Step that failed
+      options:
+        - 1. Check the TV device
+        - 2. Prepare the computer
+        - 3. Download Telum
+        - 4. Turn on debugging
+        - 5. Connect the computer to the TV device
+        - 6. Record the recovery values
+        - 7. Install Telum and open it
+        - 8. Do the Telum setup
+        - 9. Select Telum as Home
+        - 10. Set the optional features
+        - 11. Finish
+        - Update Telum
+        - Restore the previous Home app
+        - Remove Telum
+        - Install from the TV without a computer
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Command and result
+      description: Paste the command and its full output. Remove private information first.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Agent report
+      description: If an AI agent helped you, paste its completion report.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: I removed IP addresses, serial numbers, pairing codes, and account data.
+          required: true

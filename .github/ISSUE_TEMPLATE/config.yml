@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Installation guide
+    url: https://github.com/singhuu/Telum/blob/main/docs/INSTALL.md
+    about: All installation steps and commands.
+  - name: Troubleshooting guide
+    url: https://github.com/singhuu/Telum/blob/main/docs/TROUBLESHOOTING.md
+    about: Errors, their causes, and corrections. Read it before you open an issue.

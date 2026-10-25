@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-val behaviorChecks = listOf("MusicIdlePolicyCheck", "AppSupportCheck", "SpringCheck")
+val behaviorChecks = listOf("MusicIdlePolicyCheck", "AppSupportCheck", "SpringCheck", "SetupAppsCheck")
 behaviorChecks.forEach { checkName ->
     tasks.register<JavaExec>(checkName.replaceFirstChar { it.lowercase() }) {
         group = "verification"

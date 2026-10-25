@@ -215,6 +215,21 @@ class Content(private val context: Context, private val prefs: Prefs) {
         }
     }
 
+    /**
+     * One read for setup, which offers each app's rows before Live Activities is switched on.
+     * Needs only the permission. Loads no artwork and keeps nothing.
+     */
+    fun preview(result: (Map<String, List<Shelf>>) -> Unit) {
+        granted = checkPermission()
+        if (!granted) { result(emptyMap()); return }
+        try {
+            io.execute {
+                val read = try { read() } catch (_: Exception) { null }
+                main.post { result(read ?: emptyMap()) }
+            }
+        } catch (_: java.util.concurrent.RejectedExecutionException) {} // closed with the activity
+    }
+
     /** Whole tables with no selection: the provider refuses a selection from callers without full access. */
     private fun read(): Map<String, List<Shelf>> {
         val own = context.packageName

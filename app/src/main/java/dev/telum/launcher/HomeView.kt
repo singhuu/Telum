@@ -34,6 +34,9 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
+/** Apps per row on Home. Setup arranges apps in the same grid, so positions match. */
+const val HOME_COLUMNS = 5
+
 /**
  * The whole home screen in one hardware-accelerated view: ambient backdrop, hero, app grid, top
  * bar, menus and the side sheet. Drawing it ourselves avoids view-tree layout work on every focus
@@ -58,12 +61,14 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
         fun memoryLine(): String
         /** The latest memory reading, without starting a new one (cheap enough to call per frame). */
         fun memoryText(): String
+        /** Whether the remote's Home button opens Telum. */
+        fun isDefaultHome(): Boolean
         fun stockHomeEnabled(): Boolean
         fun reloadApps()
         /** Rows other apps publish (continue watching); see Content. */
         fun content(): Content
         fun openProgramme(pkg: String, programme: Programme)
-        /** Turns "Show what you're watching" on (asking Android for permission) or off. */
+        /** Turns Live Activities on (asking Android for permission) or off. */
         fun setWatching(on: Boolean)
         /** What other apps are playing; see Media. */
         fun media(): Media
@@ -76,7 +81,7 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
     private companion object {
         const val W = 960f
         const val MARGIN = 48f
-        const val COLS = 5
+        const val COLS = HOME_COLUMNS
         const val TILE_W = 156f
         const val TILE_H = 87.75f
         const val GAP = 21f
@@ -365,7 +370,7 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
 
     private fun canDrawFrames() = active && isAttachedToWindow && isShown && windowVisibility == VISIBLE && hasWindowFocus()
 
-    private fun musicIdleEligible() = canDrawFrames() && nowPlaying()?.let { it.playing && AppSupport.isMusic(it.pkg) } == true &&
+    private fun musicIdleEligible() = prefs.musicIdleOn && canDrawFrames() && nowPlaying()?.let { it.playing && AppSupport.isMusic(it.pkg) } == true &&
         !moving && !okDown && !menuOpen() && !sheetOpen()
 
     private val musicIdleCheck = Runnable { updateMusicIdle(); kick() }
@@ -1890,7 +1895,7 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
         // Label for the focused top button.
         val fMax = topFocus.maxOf { it.value }
         if (fMax > 0.02f && zone == Zone.TOP) {
-            val label = if (topIndex == 0) "Search" else "Control center"
+            val label = if (topIndex == 0) "Search" else "Control centre"
             labelP.textSize = px(12.5f)
             labelP.alpha = (fMax * alpha * 255).toInt()
             cv.drawText(label, topButtonCenter(topIndex), y + px(42f), labelP)
@@ -1998,6 +2003,7 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
             SheetItem("remote", "Remotes & accessories") { host.system("remotes") },
             SheetItem("grid", "Apps") { host.system("apps") },
             SheetItem("sliders", "Telum", chevron = true) { pushPage(telumPage()) },
+            SheetItem("home", "Run setup again") { closeSheetNow(); host.system("onboarding") },
             SheetItem("controls", "All settings") { host.system("settings") },
         )
     }
@@ -2006,29 +2012,32 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
         // Read once when the page opens, not on every rebuild or frame: getMemoryInfo walks /proc.
         val memory = host.memoryLine() // refreshes in the background; the row reads the latest
         val stockHome = host.stockHomeEnabled()
-        return SheetPage("telum", "Telum") { telumItems(memory, stockHome) }
+        val telumHome = host.isDefaultHome()
+        return SheetPage("telum", "Telum") { telumItems(memory, stockHome, telumHome) }
     }
 
-    private fun telumItems(memory: String, stockHome: Boolean): List<SheetItem> =
-        listOf(
+    private fun telumItems(memory: String, stockHome: Boolean, telumHome: Boolean): List<SheetItem> =
+        listOfNotNull(
             SheetItem("move", "Rearrange apps") { closeSheet(); zone = Zone.GRID; startMove() },
             SheetItem(
-                "image", "Wallpaper",
+                "image", "Background",
                 value = { wallpaperName(prefs.wallpaper) },
                 choice = { d -> prefs.wallpaper = cycle(WALLPAPERS, prefs.wallpaper, d); host.settingsChanged("wallpaper") },
             ),
             SheetItem(
-                "type", "Typeface",
+                "type", "Font",
                 value = { Fonts.name(prefs.typeface) },
                 choice = { d -> prefs.typeface = cycle(Fonts.CHOICES, prefs.typeface, d); host.settingsChanged("typeface") },
             ),
             // Rows other apps publish (Stremio's Continue Watching). Turning it on asks Android first.
-            SheetItem("play", "Show what you're watching", value = { if (host.content().enabled) "On" else "Off" },
+            SheetItem("play", "Live Activities", value = { if (host.content().enabled) "On" else "Off" },
                 choice = { host.setWatching(!host.content().enabled) }),
-            SheetItem("rows", "Rows from apps", chevron = true, enabled = host.content().enabled) { pushPage(rowsPage()) },
+            SheetItem("rows", "What each app shows", chevron = true, enabled = host.content().enabled) { pushPage(rowsPage()) },
             // What other apps are playing, with play, pause and skip. Needs notification access.
             SheetItem("music", "Music controls", value = { if (host.media().enabled) "On" else "Off" },
                 choice = { host.setMusicControls(!host.media().enabled) }),
+            SheetItem("music", "Music idle display", value = { if (prefs.musicIdleOn) "On" else "Off" },
+                choice = { prefs.musicIdleOn = !prefs.musicIdleOn; updateMusicIdle(); kick() }),
             // Off by default: finding a photo means sending the artist's name to TheAudioDB.
             SheetItem("image", "Artist photos", value = { if (prefs.artistPhotos) "On" else "Off" }, enabled = host.media().enabled,
                 choice = {
@@ -2037,18 +2046,23 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
                     heroShown?.let { if (it.media != null) it.backdrop = 0 }
                     kick()
                 }),
-            SheetItem("motion", "Motion", value = { if (prefs.motion) "On" else "Reduced" },
+            SheetItem("motion", "Motion", value = { if (prefs.motion) "Full" else "Reduced" },
                 choice = { prefs.motion = !prefs.motion; host.settingsChanged("motion") }),
-            SheetItem("label", "App names", value = { if (prefs.alwaysShowNames) "Always" else "When focused" },
+            // The low hum under the intro, which plays at setup and on the first start after a reboot.
+            SheetItem("sound", "Intro sound", value = { if (prefs.introSound) "On" else "Off" },
+                choice = { prefs.introSound = !prefs.introSound }),
+            SheetItem("label", "App names", value = { if (prefs.alwaysShowNames) "Always" else "When highlighted" },
                 choice = { prefs.alwaysShowNames = !prefs.alwaysShowNames; host.settingsChanged("names") }),
             SheetItem("clock", "Clock", value = { if (prefs.clock24) "24-hour" else "12-hour" },
                 choice = { prefs.clock24 = !prefs.clock24; host.settingsChanged("clock") }),
             SheetItem("partly", "Weather", value = { if (prefs.weatherOn) "On" else "Off" },
                 choice = { prefs.weatherOn = !prefs.weatherOn; host.settingsChanged("weather") }),
-            SheetItem("thermo", "Units", value = { if (prefs.fahrenheit) "°F" else "°C" },
+            SheetItem("thermo", "Temperature", value = { if (prefs.fahrenheit) "Fahrenheit" else "Celsius" },
                 choice = { prefs.fahrenheit = !prefs.fahrenheit; host.settingsChanged("units") }),
-            SheetItem("pin", "Location", value = { prefs.place.substringBefore(',').ifBlank { "Choose a city" } }, chevron = true) { host.editPlace() },
+            SheetItem("pin", "Weather city", value = { prefs.place.substringBefore(',').ifBlank { "Choose city" } }, chevron = true) { host.editPlace() },
             SheetItem("eye", "Hidden apps", value = { prefs.hidden.size.takeIf { it > 0 }?.toString() ?: "None" }, chevron = true) { pushPage(hiddenPage()) },
+            // Setup asks once; this row stays for later, until the Home button opens Telum.
+            if (telumHome) null else SheetItem("home", "Make Telum your Home") { closeSheet(); host.system("default-home") },
             if (stockHome) SheetItem("home", "Open Google TV home") { closeSheet(); host.system("stock-home") }
             else SheetItem("home", "Google TV home", value = { "Turned off" }, enabled = false),
             SheetItem("info", "Credits", chevron = true) { host.system("credits") },
@@ -2066,7 +2080,7 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
      * Which row each app shows above its tile. "Automatic" is a row with viewing progress (on the
      * SHIELD, Stremio's Continue Watching); any other row, such as SmartTube's History, is opt-in.
      */
-    private fun rowsPage(): SheetPage = SheetPage("rows", "Rows from apps") {
+    private fun rowsPage(): SheetPage = SheetPage("rows", "What each app shows") {
         val shelves = host.content().shelves
         val labels = host.allApps().associate { it.pkg to it.label }
         val pkgs = shelves.keys.filter { it in labels }.sortedBy { labels[it]?.lowercase() }
@@ -2091,7 +2105,7 @@ class HomeView(context: Context, private val host: Host, private val prefs: Pref
 
     private val WALLPAPERS = listOf("dynamic", "aurora", "ocean", "sunset", "forest", "graphite")
     private fun wallpaperName(id: String) = when (id) {
-        "dynamic" -> "Follows app"
+        "dynamic" -> "App colours"
         "aurora" -> "Aurora"
         "ocean" -> "Ocean"
         "sunset" -> "Sunset"

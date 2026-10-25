@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Telum" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
-        <item name="android:windowBackground">@drawable/window_bg</item>
+        <!-- Black, so a cold start (at boot, the intro's) begins on true black. MainActivity puts
+             the navy backdrop (window_bg) back once it knows what is playing. -->
+        <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackground">#FF07080C</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
@@ -13,7 +15,7 @@
         <item name="android:statusBarColor">#00000000</item>
     </style>
 
-    <!-- The one standard dialog (weather location), dressed to match the side sheet. -->
+    <!-- Standard dialogs (weather city, default Home, credits), dressed to match the side sheet. -->
     <style name="Theme.Telum.Dialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert">
         <item name="android:windowBackground">@drawable/dialog_bg</item>
         <item name="android:colorBackground">#FF1A1C22</item>
@@ -33,6 +35,8 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">17sp</item>
         <item name="android:minWidth">112dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
         <item name="android:layout_marginStart">8dp</item>
     </style>
 </resources>

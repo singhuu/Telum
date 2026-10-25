@@ -153,6 +153,13 @@ object Glyphs {
             "label" -> {
                 cv.drawLine(4f, 7f, 20f, 7f, p); cv.drawLine(12f, 7f, 12f, 19f, p)
             }
+            "sound" -> {
+                path.reset(); path.moveTo(4f, 9.5f); path.lineTo(7.5f, 9.5f); path.lineTo(12f, 5.5f)
+                path.lineTo(12f, 18.5f); path.lineTo(7.5f, 14.5f); path.lineTo(4f, 14.5f); path.close()
+                cv.drawPath(path, p)
+                r.set(10f, 8.5f, 16f, 15.5f); cv.drawArc(r, -50f, 100f, false, p)
+                r.set(10f, 5.5f, 20f, 18.5f); cv.drawArc(r, -50f, 100f, false, p)
+            }
             "play" -> {
                 cv.drawCircle(12f, 12f, 8.5f, p)
                 path.reset(); path.moveTo(10f, 8.5f); path.lineTo(15.5f, 12f); path.lineTo(10f, 15.5f); path.close()

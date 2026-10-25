@@ -10,8 +10,10 @@
                 android:startColor="#FF2B2F6B" android:endColor="#FF0B0D18" />
         </aapt:attr>
     </path>
-    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="7"
-        android:pathData="M48,22a26,26 0,1 1,0 52a26,26 0,1 1,0 -52z" />
+    <!-- The mark: Telum above a slim notched dart. The intro's shaders draw the same shape (common.glsl). -->
+    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FFFFFFFF" android:strokeWidth="3"
+        android:strokeLineJoin="round"
+        android:pathData="M48,38 L61,81 L48,70 L35,81 Z" />
     <path android:fillColor="#FFFFD58A"
-        android:pathData="M48,38a10,10 0,1 1,0 20a10,10 0,1 1,0 -20z" />
+        android:pathData="M48,14.5a6.5,6.5 0,1 1,0 13a6.5,6.5 0,1 1,0 -13z" />
 </vector>

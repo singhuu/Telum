@@ -1,0 +1,53 @@
+name: Bug report
+description: Telum is installed, but something does not operate correctly.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Issues are public.** Do not include IP addresses, serial numbers, account names, or media titles.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened
+      description: Tell what you saw, and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to get the problem
+      description: Give the remote buttons and the screens, one step on each line.
+      placeholder: |
+        1. Open Control centre.
+        2. Select Telum.
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: TV device and Android version
+      placeholder: NVIDIA SHIELD TV Pro (2019), Android 11
+    validations:
+      required: true
+  - type: input
+    id: telum
+    attributes:
+      label: Telum version
+      description: Control centre › Telum › About Telum, or the release that you installed.
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: features
+    attributes:
+      label: Features that are on
+      description: For example, Live Activities, Music controls, Music idle display, Artist photos, Weather.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: The output of `adb -s "TV_SERIAL" logcat -d -b crash` and `adb -s "TV_SERIAL" logcat -d -s Telum`. Remove private information first.
+      render: text

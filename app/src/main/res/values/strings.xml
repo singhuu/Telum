@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Telum</string>
+    <plurals name="setup_apps_selected">
+        <item quantity="one">%1$d of %2$d app selected</item>
+        <item quantity="other">%1$d of %2$d apps selected</item>
+    </plurals>
 </resources>

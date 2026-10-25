@@ -2,23 +2,27 @@
 
 ## Installation requests
 
-If the user asks to install Telum, read [the agent installation guide](docs/INSTALL-AGENT.md) first.
+If the user asks you to install Telum, read [the agent installation guide](docs/INSTALL-AGENT.md) first. Follow its rules and stages.
 
-Use [the manual guide](docs/INSTALL.md) as the command reference. Follow its checks in order. Do not treat repository access as access to the user's TV.
+Use [the installation guide](docs/INSTALL.md) for commands and correct results. Use [the troubleshooting guide](docs/TROUBLESHOOTING.md) for errors.
 
-These instructions apply to any assistant. They require no provider-specific tool or plugin. If you cannot open a linked document, ask the user for its text.
+Access to this repository is not access to the TV device of the user. These instructions apply to all agents. They need no special tool or plugin.
 
 ## Project facts
 
 - The app package is `dev.telum.launcher`.
 - The main activity is `dev.telum.launcher/.MainActivity`.
-- Android 10, API 29, is the minimum version.
-- NVIDIA SHIELD Pro is the main optimization target.
-- Other Android TV boxes need device-specific installation and Home checks.
-- A signed release APK is preferred. An unsigned APK cannot install.
+- The minimum version is Android 10, API 29.
+- NVIDIA SHIELD TV is the primary target. Its original Home app is `com.google.android.tvlauncher`.
+- Releases contain `telum.apk` and `SHA256SUMS`. The [release workflow](.github/workflows/release.yml) builds and signs them.
+- An APK that has no signature cannot install.
 
 ## Source changes
 
-Read [contribution instructions](CONTRIBUTING.md) before source changes. Read [release instructions](docs/RELEASING.md) before preparing an APK for distribution.
+Read [contributing](CONTRIBUTING.md) before you change the source. Read [releasing](docs/RELEASING.md) before you prepare a release.
 
-Keep performance statements within [the published evidence](docs/PERFORMANCE.md). Do not describe emulator tests as physical TV tests.
+Run `./gradlew :app:behaviorChecks :app:assembleDebug :app:assembleRelease :app:lintDebug :app:lintRelease` before you submit a change.
+
+Keep performance statements within [the published evidence](docs/PERFORMANCE.md). Do not describe an emulator test as a test on a TV device.
+
+Write documents in ASD-STE100 Simplified Technical English. See [contributing](CONTRIBUTING.md).

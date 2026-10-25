@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Telum's TV banner: the halo mark and a hand-drawn stroked wordmark (no font needed). -->
+<!-- Telum's TV banner: the dart mark and a hand-drawn stroked wordmark (no font needed). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="320dp"
@@ -14,16 +14,17 @@
     </path>
     <path android:pathData="M0,0h320v180h-320z">
         <aapt:attr name="android:fillColor">
-            <gradient android:type="radial" android:centerX="82" android:centerY="88" android:gradientRadius="120"
+            <gradient android:type="radial" android:centerX="82" android:centerY="65" android:gradientRadius="120"
                 android:startColor="#55FF9E5E" android:endColor="#00FF9E5E" />
         </aapt:attr>
     </path>
     <group android:translateX="-10">
-    <!-- Halo mark -->
-    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="6"
-        android:pathData="M82,64a24,24 0 1 1 0,48a24,24 0 1 1 0,-48z" />
+    <!-- Dart mark: the icon's, at 0.88 scale, centred on the wordmark's height -->
+    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FFFFFFFF" android:strokeWidth="2.64"
+        android:strokeLineJoin="round"
+        android:pathData="M82,79.76 L93.44,117.6 L82,107.92 L70.56,117.6 Z" />
     <path android:fillColor="#FFFFD58A"
-        android:pathData="M82,79a9,9 0 1 1 0,18a9,9 0 1 1 0,-18z" />
+        android:pathData="M82,59.08a5.72,5.72 0 1 1 0,11.44a5.72,5.72 0 1 1 0,-11.44z" />
     <!-- Wordmark: T e l u m -->
     <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="7"
         android:strokeLineCap="round" android:strokeLineJoin="round"
