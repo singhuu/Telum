@@ -2,6 +2,8 @@
 
 Telum is a home screen app for Android TV. It puts your apps first, adds no advertisements, and lets you select what the home screen shows.
 
+![Telum Home on a TV. The Spotify tile is selected. A photo of Claude Debussy and the music that plays show above the app tiles.](docs/images/home.jpg)
+
 Developed by Shantanu Singh with Claude and OpenAI Codex.
 
 Telum is optimized for NVIDIA SHIELD TV. Other Android TV devices with Android 10 or newer can also use it. Compatibility with all devices is not confirmed.
@@ -19,10 +21,23 @@ Telum takes its name from a historical name for the star Gamma Sagittae. See the
 | Guided setup | At the first start, you select your apps, put them in order, and select a style. You can do the setup again at any time. |
 | Content is optional | You select if Home shows app content, music controls, weather, and artist photos. |
 | Backgrounds follow your apps | Known services have their own colors. Other apps use colors from their artwork. |
-| A dim screen for music | When music plays and you do not touch the remote for 60 seconds, dim album art replaces the tiles. |
+| A dim music screen | When music plays and you do not touch the remote for 60 seconds, dim album art or an artist photo replaces the tiles. |
 | Animations stop when settled | Telum stops drawing when the screen does not change. See [test results and limits](docs/PERFORMANCE.md). |
 
-The dim music screen moves the artwork each minute. It does not change the screensaver settings of the TV device. Push an arrow, OK, or Back to show the home screen again. The dim screen decreases static content, but it does not prevent screen burn-in.
+The dim music screen moves the artwork each minute. It does not change the screensaver settings of the TV device. Push an arrow, OK, or Back to show the home screen again. The dim music screen decreases static content, but it does not prevent screen burn-in.
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/setup-style.png" alt="The setup step How do you like your home screen, with the Recommended and Light styles."><br>Guided setup: select Recommended or Light, or select Customize.</td>
+    <td width="50%"><img src="docs/images/tile-menu.png" alt="The tile menu of YouTube on Telum Home, with Move, Hide from home, and App info."><br>Hold OK on a tile to move it or hide it.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/content.png" alt="Telum Home with the VLC tile selected. Big Buck Bunny shows in Continue watching with 7 minutes left."><br>Select an app in the first row to see its content. Here, VLC shows Continue watching.</td>
+    <td width="50%"><img src="docs/images/music-dim.png" alt="The dim music screen. A dim photo of Claude Debussy fills the screen, with the title A Slow Waltz."><br>The dim music screen shows when music plays for 60 seconds without the remote.</td>
+  </tr>
+</table>
+
+Picture credits: the photo of Claude Debussy is by Atelier Nadar, about 1908, and is in the public domain. *Big Buck Bunny* is © Blender Foundation, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). App names and logos belong to their owners.
 
 ## Install Telum
 

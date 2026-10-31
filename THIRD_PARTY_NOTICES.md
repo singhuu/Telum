@@ -28,4 +28,8 @@ Weather data by [Open-Meteo](https://open-meteo.com/), under [CC BY 4.0](https:/
 
 Optional artist photos and data come from [TheAudioDB](https://www.theaudiodb.com/). App icons and banners come from the installed apps. Programme artwork comes from the addresses that the apps publish. Telum does not contain streaming posters or a music catalogue.
 
+## README pictures
+
+The pictures in `docs/images/` are screenshots of Telum on a SHIELD TV. They show app banners from the installed apps. `content.png` contains a frame of *Big Buck Bunny*, © Blender Foundation, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). `home.jpg` and `music-dim.png` contain a photo of Claude Debussy by Atelier Nadar, about 1908, which is in the public domain. Small album art from Spotify shows in the music control of `content.png` and `tile-menu.png`.
+
 The GPL license of Telum does not apply to third-party artwork and trademarks. Their availability depends on the terms, the data, and the service of each provider.
