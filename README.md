@@ -21,10 +21,10 @@ Telum takes its name from a historical name for the star Gamma Sagittae. See the
 | Guided setup | At the first start, you select your apps, put them in order, and select a style. You can do the setup again at any time. |
 | Content is optional | You select if Home shows app content, music controls, weather, and artist photos. |
 | Backgrounds follow your apps | Known services have their own colors. Other apps use colors from their artwork. |
-| A dim music screen | When music plays and you do not touch the remote for 60 seconds, dim album art or an artist photo replaces the tiles. |
+| A dim music display | When music plays and you do not touch the remote for 60 seconds, dim album art or an artist photo replaces the tiles. |
 | Animations stop when settled | Telum stops drawing when the screen does not change. See [test results and limits](docs/PERFORMANCE.md). |
 
-The dim music screen moves the artwork each minute. It does not change the screensaver settings of the TV device. Push an arrow, OK, or Back to show the home screen again. The dim music screen decreases static content, but it does not prevent screen burn-in.
+The dim music display moves the artwork each minute. It does not change the screensaver settings of the TV device. Push an arrow, OK, or Back to show the home screen again. The dim music display decreases static content, but it does not prevent screen burn-in.
 
 <table>
   <tr>
@@ -33,7 +33,7 @@ The dim music screen moves the artwork each minute. It does not change the scree
   </tr>
   <tr>
     <td width="50%"><img src="docs/images/content.png" alt="Telum Home with the VLC tile selected. Big Buck Bunny shows in Continue watching with 7 minutes left."><br>Select an app in the first row to see its content. Here, VLC shows Continue watching.</td>
-    <td width="50%"><img src="docs/images/music-dim.png" alt="The dim music screen. A dim photo of Claude Debussy fills the screen, with the title A Slow Waltz."><br>The dim music screen shows when music plays for 60 seconds without the remote.</td>
+    <td width="50%"><img src="docs/images/music-dim.png" alt="The dim music display. A dim photo of Claude Debussy fills the screen, with the title A Slow Waltz."><br>The dim music display shows when music plays for 60 seconds without the remote.</td>
   </tr>
 </table>
 
